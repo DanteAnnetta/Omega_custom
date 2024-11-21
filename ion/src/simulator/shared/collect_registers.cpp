@@ -1,19 +1,19 @@
 #include <ion.h>
+#include <setjmp.h>
 
-extern "C" {
-
-// define in assembly code
-// Force the name as archs (linux/macos) don't mangle C names the same way
-extern uintptr_t collect_registers(uintptr_t * regs) asm ("_collect_registers");
-
-}
 namespace Ion {
 
-// Wrapper to avoid handling c++ name mangling when writing assembly code
-
-uintptr_t collectRegisters(jmp_buf buf) {
-  uintptr_t * regs = (uintptr_t *)buf;
-  return collect_registers(regs);
+/* Forbid inlining to ensure dummy to be at the top of the stack. Otherwise,
+ * LTO inlining can make regs lower on the stack than some just-allocated
+ * pointers. */
+__attribute__((noinline))uintptr_t collectRegisters(jmp_buf buf) {
+  /* TODO: we use setjmp to get the registers values to look for python heap
+   * root. However, the 'setjmp' does not guarantee that it gets all registers
+   * values. We should check our setjmp implementation for the device and
+   * ensure that it also works for other platforms. */
+  setjmp(buf);
+  int dummy;
+  return (uintptr_t)&dummy;
 }
 
 }
