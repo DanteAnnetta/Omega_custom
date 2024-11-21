@@ -16,7 +16,7 @@ static SDL_Window * sWindow = nullptr;
 static SDL_Renderer * sRenderer = nullptr;
 static bool sNeedsRefresh = false;
 static SDL_Rect sScreenRect;
-static bool sScreenOnly = false;
+static bool sScreenOnly = true; // de esta forma se deshabilita el teclado
 
 bool isHeadless() {
   return sWindow == nullptr;
