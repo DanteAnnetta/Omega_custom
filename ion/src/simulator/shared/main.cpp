@@ -98,7 +98,8 @@ int main(int argc, char * argv[]) {
   Random::init();
   if (!headless) {
     bool screen_only = args.popFlag("--screen-only") || args.popFlag("-s");
-    bool fullscreen =  args.popFlag("--fullscreen")  || args.popFlag("-f");
+    //bool fullscreen =  args.popFlag("--fullscreen")  || args.popFlag("-f");
+    bool fullscreen = true;
     bool unresizable = args.popFlag("--unresizable") || args.popFlag("-u");
     Journal::init();
 #if EPSILON_TELEMETRY
